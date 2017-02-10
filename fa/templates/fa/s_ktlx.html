@@ -1,0 +1,243 @@
+{%extends "cpis/base.html"%}
+{%load staticfiles%}
+
+{%block title%}课堂练习{%endblock%}
+{%block main-content%}<!--block main-content开始  -->
+<!--大xs 小sm 中md  -->
+{%if content%}<!--如果试题不存在显示的提示  -->
+还没有适合的试题发布！	
+{%else%}<!--试题存在显示的结果  -->
+	<div class="row"><!--获取位置和倒计时  -->
+		<div class="col-sm-6">
+		   	<label id="jwdxx">未获取</label>
+			<button id="getLocation">点击获取位置信息</button>
+			<label class="pull-right" id="djs">倒计时:<span id="minute">0</span>分钟<span id="second">0</span>秒</label><!-- 练习时间 -->
+		</div>
+	</div> <!--结束获取位置和倒计时  -->
+	<div class="row"><!-- 选择题 -->
+		{%for item in ptatices_choice%}
+		<div class="row xz" id={{item.id}}><!--单个选择题  -->
+			<div class="col-sm-12"><!--col-sm-12  -->
+				<p><b>{{forloop.counter}}.{{item.topic}}</b></p>
+				<form class="control-group" num="0">
+					<div class="radio col-sm-2">
+						<label>
+							<input name="form-field-radio" class="ace" type="radio" value="a" >
+							<span class="lbl">A.{{item.optiona}}</span>
+						</label>
+					</div>
+					<div class="radio col-sm-2">
+						<label>
+							<input name="form-field-radio" class="ace" type="radio" value="b" >
+							<span class="lbl"> B.{{item.optionb}}</span>
+						</label>
+					</div>
+					<div class="radio col-sm-2">
+						<label>
+							<input name="form-field-radio" class="ace" type="radio" value="c">
+							<span class="lbl"> C.{{item.optionc}}</span>
+						</label>
+					</div>
+					<div class="radio col-sm-2">
+						<label>
+							<input name="form-field-radio" class="ace" type="radio" value="d">
+							<span class="lbl"> D.{{item.optiond}}</span>
+						</label>
+					</div>
+					<div class="radio col-sm-2">
+						<label>
+							<input name="form-field-radio" class="ace" type="radio" value="e">
+							<span class="lbl"> E.{{item.optione}}</span>
+						</label>
+					</div>
+         		</form>
+			</div><!--end col-sm-12  -->
+		</div><!--结束单个选择题 --><br>
+		{%endfor%}
+	</div><!-- 结束选择题 -->
+	<div class="row"><!-- 填空题 -->
+		{%if pratices_fill%}
+		<h3>二.填空题</h3>
+		{%for item in pratices_fill%}
+		<div class="row fill" id="{{item.id}}">
+			<div class="col-sm-12"><!--开始 col-sm-12 -->
+				<p>{{forloop.counter}}.{{item.topic}}</p>
+				<input id="form-field-1" class="col-xs-10 col-sm-5" placeholder="请输入答案" type="text">
+			</div><!--结束 col-sm-12 -->
+		</div>
+		{%endfor%}
+		{%endif%}
+	</div><!-- 结束填空题 --><hr>
+	<div class="row"><!--判断题 -->
+		{%if pratices_fill%}
+		<h3>三.判断题</h3>
+		{%for item in pratices_judgement%}
+		<div class="row pd" id="{{item.id}}">
+			<div class="col-sm-12"><!--开始 col-sm-12 -->
+				<p>{{forloop.counter}}.{{item.topic}}</p>
+				<label>
+					<input id="gritter-light" class="ace ace-switch ace-switch-5" type="checkbox">
+					<span class="lbl"></span>
+				</label>
+			</div><!--结束 col-sm-12 -->
+		</div>
+		{%endfor%}
+		{%endif%}
+	</div><!--结束判断题 --><hr>
+	<div class="row"><!--提交按钮  -->
+		<button class="btn btn-lg btn-success" value="submit">
+			<i class="icon-ok"></i>提交试题
+		</button>
+	</div><!--提交按钮结束  -->
+{%endif%}<!--结束:如果试题不存在显示的提示  -->
+{%endblock%}<!--block main-content结束  -->
+{%block js_bottom%}
+	<script type="text/javascript">
+			jQuery(function($) {
+				var data=new Object();
+				data.id={{pubid}};
+				var jsondata=JSON.stringify(data);
+				var jwd="";
+				setInterval(function(){
+					$.ajax({
+						type:"POST",
+						url:"{%url 'cpis:getdjs'%}",
+						contentType:"application/json;charset=utf-8",
+						data:jsondata,
+						dataType:"json",
+						success:function(message){
+							if(message!=false){
+								
+								if(message["mintues"]<1490){
+									min=message["mintues"]; 	
+									sec=message["seconds"];
+									$("#minute").text(min);
+									$("#second").text(sec);
+								}else{
+									$("#djs").html("答题时间到！");
+									$("button[value=submit]").click();
+								}
+								
+							}
+						},
+						error:function(message){
+							alert("倒计时出错,请检查网络或者联系管理员");
+						}
+					});
+				},1000);
+				
+				$("button[value=submit]").click(function(){
+					/*开始 */
+					/* if(jwd=="")
+					{
+							alert("地理位置不可以为空！请点击获取");
+							return;
+					} */
+					var root=new Object();
+					root.status=200;
+					root.message="";
+					var datacontent=new Object();
+					datacontent.pubid={{pubid}}
+					datacontent.resttime=$("#minute").text()*60+$("#second").text();
+					//datacontent.position=
+					var yydarr=new Array();
+					$("form.control-group").each(function(i){
+						yydarr[i]=$(this).attr("num");
+					});
+					datacontent.hesitateinfo= yydarr;
+					//datacontent.errorinfo=
+					var xzarr=new Array();
+					$(".xz").each(function(i){
+						var xz=new Object();
+						var id= $(this).attr("id");
+						var answer=$(this).children().find("input:radio:checked").val();			
+						xz.id=id;
+						xz.answer=answer;
+						xzarr[i]=xz;
+					});
+					/* 获取填空题所有信息 */
+					var tkarr=new Array();
+					$(".fill").each(function(i){
+						var tk=new Object();
+						var id= $(this).attr("id");
+						var answer=$(this).children().find("#form-field-1").val();
+						tk.id=id;
+						tk.answer=answer;
+						tkarr[i]=tk;
+					});/*填空题 */
+					/* 获取判断题所有信息 */
+					var pdarr=new Array();
+					$(".pd").each(function(i){
+						var pd=new Object();
+						var id= $(this).attr("id");						
+						var answer=$(this).children().find("#gritter-light").prop("checked")				
+						pd.id=id;
+						pd.answer=answer;
+						pdarr[i]=pd;
+					});/*大循环 */
+					datacontent.xz=xzarr;
+					datacontent.fill=tkarr;
+					datacontent.judge=pdarr;
+					root.data=datacontent;
+					var jsonstr =JSON.stringify(root);
+					alert(jsonstr);
+					$.ajax({
+						type:"POST",
+						url:"{%url 'cpis:studentsubmit'%}",
+						contentType:"application/json;charset=utf-8",
+						data:jsonstr,
+						dataType:"json",
+						success:function(message){
+							if(message>0){
+								if(message==200){
+									alert("提交成功！");
+									window.location = "{%url 'cpis:studentresult'%}";
+								}
+							}
+						},
+						error:function(message){
+							alert("提交失败,请检查网络或者联系管理员");
+						}
+					});
+					
+				   /*结束  */
+				});
+				/*获取地点开始 */
+				   $("#getLocation").click(function(){
+					   if (navigator.geolocation){      
+		        		 navigator.geolocation.getCurrentPosition(function(position){
+		        		 jwd_temp=position.coords.longitude+","+position.coords.latitude;
+		     			 jwd=jwd_temp;
+		     			 $("#jwdxx").text("获取成功");
+		        	},function(error){
+		        		switch(error.code)
+		        	    {
+		        	    case error.PERMISSION_DENIED:
+		        	      alert("请求被拒绝");
+		        	      break;
+		        	    case error.POSITION_UNAVAILABLE:
+		        	    	alert("位置信息不可用！");
+		        	      break;
+		        	    case error.TIMEOUT:
+		        	    	alert("请求超时");
+		        	      break;
+		        	    case error.UNKNOWN_ERROR:
+		        	    	alert("不知道的错误！");
+		        	      break;
+		        	    }
+		        	});
+		     	   }else{
+		     		   alert("浏览器不支持");
+		     	    }
+			    }); 
+				   /*获取地点结束 */
+				/* 添加犹豫度  */
+				 $("input[type='radio']").change(function(i){
+				 $("form.control-group").attr("num",function(index,oldvalue){
+					var value=parseInt(oldvalue)+1;
+					$(this).attr("num",value+"");
+				 });
+				 });/* 结束添加犹豫度  */
+			});
+	</script>
+{%endblock%}

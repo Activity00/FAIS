@@ -1,0 +1,298 @@
+{%extends "cpis/base.html"%}
+{%load staticfiles%}
+
+{%block title%}添加试题{%endblock%}
+{%block main-content%}
+<div class="row">
+<div class="col-sm-3">
+	<label for="form-field-select-1">练习分类</label>
+	<select class="form-control" id="form-field-select-1">
+	<option value="">&nbsp;</option>
+		{%if course%}
+		{%for item in course%}
+	    <option value="{{item.id}}">{{item.cname}}</option>
+		{%endfor%}
+		{%endif%}								
+	</select>
+</div>
+<div class="col-sm-3">
+	<label class="" for="form-field-12">章节</label>
+	<input class="form-control zhangjie" placeholder="例如：第一章" id="zhangjie"></input>	
+</div>
+</div>
+<hr/>
+<h3>一.选择题</h3>
+<div class="row xz" id="s0">
+<form class="form-horizontal" role="form" action="#">
+	<div class="form-group">
+		<div class="col-sm-9">
+			<label class="col-sm-2" for="form-field-12">题干1</label>
+			<!-- <input id="form-field-1" class="col-xs-10 col-sm-5" placeholder="请输入题干" type="text"> -->
+			<textarea class="form-control" placeholder="请输入题干"></textarea>	
+		</div>
+	</div>
+	<div class="space-4"></div>
+	<div class="form-group">
+		<div class="col-xs-12 col-sm-4">
+			<div class="widget-box">
+				<div class="widget-header">
+					<h4>选项</h4>
+					<div class="widget-toolbar">
+						<a href="#" data-action="collapse">
+							<i class="icon-chevron-up"></i>
+						</a>
+					</div>
+					<div class="widget-body">
+						<div class="widget-main"  id="xx">
+							<div>
+								<label for="form-field-8">A:</label> 	 
+								<textarea class="form-control" placeholder="选项A:"></textarea>	
+							</div>
+							<div>
+								<label for="form-field-8">B:</label> 	 
+								<textarea  class="form-control" placeholder="选项B:"></textarea>	
+							</div>
+							<div>
+								<label for="form-field-8">C:</label> 	 
+								<textarea  class="form-control" placeholder="选项C:"></textarea>	
+							</div>
+							<div>
+								<label for="form-field-8">D:</label> 	 
+								<textarea  class="form-control" placeholder="选项D:"></textarea>	
+							</div>
+							<div>
+								<label for="form-field-8">E:</label> 	 
+								<textarea  class="form-control" placeholder="选项E:"></textarea>	
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-4">
+			<div class="widget-box">
+				<div class="widget-header">
+					<h4>答案与解析</h4>
+					<div class="widget-toolbar">
+						<a href="#" data-action="collapse">
+							<i class="icon-chevron-up"></i>
+						</a>
+					</div>
+					<div class="widget-body">
+						<div class="widget-main">
+							<label for="form-field-8">正确答案</label>
+							<textarea id="canswer" class="form-control" placeholder="请输入A、B、C、D、E多项选择请用逗号隔开 "></textarea>
+							<div class="space-8"></div>
+							<label for="form-field-8">解析</label>
+							<textarea id="jx" class="form-control" placeholder="请输入解题思路......"></textarea>
+							<div class="space-8"></div>
+							<label for="form-field-select-1">知识点</label>
+							<textarea id="zsd" class="form-control" placeholder="请输入知识点以逗号隔开"></textarea>			
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</form>
+</div>
+<button class="btn btn-lg btn-success" value="click_x">
+	<i class="icon-ok"></i>添加选择题
+</button>
+<hr/>
+<!--一填空题  -->
+<h3>二.填空题</h3>
+<div class="row fill" id="t0">
+<div class="form-horizontal" role="form">
+	<div class="form-group">
+		<div class="col-sm-9">
+			<label class="col-sm-2" for="form-field-12">题干1</label>
+			<!-- <input id="form-field-1" class="col-xs-10 col-sm-5" placeholder="请输入题干" type="text"> -->
+			<textarea class="form-control" placeholder="请输入题干"></textarea>	
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-sm-3">
+			<label class="col-sm-5" for="form-field-12">正确答案:</label>
+ 		 <!-- <input id="form-field-1" class="col-xs-10 col-sm-5" placeholder="请输入题干" type="text">  -->
+			<textarea id="canswer" class="form-control" placeholder="请输入正确答案"></textarea>
+		</div>
+		<div class="col-sm-3">
+			<label class="col-sm-3" for="form-field-12">解析:</label>
+			<textarea id="jx" class="form-control" placeholder="请输入解析"></textarea>
+		</div>
+		<div class="col-sm-3">
+			<label class="col-sm-4" for="form-field-12">知识点:</label>
+			<textarea id="zsd" class="form-control" placeholder="知识点"></textarea>
+		</div>
+	</div>
+</div>
+</div>
+<button class="btn btn-lg btn-success" value="click_t">
+	<i class="icon-ok"></i>添加填空题
+</button>
+<hr/>
+<!--一判断题  -->
+<h3>三.判断题</h3>
+<div class="row pd" id="p0">
+<div class="form-horizontal" role="form" >
+	<div class="form-group">
+		<div class="col-sm-9">
+			<label class="col-sm-2" for="form-field-12">题干1</label>
+			<!-- <input id="form-field-1" class="col-xs-10 col-sm-5" placeholder="请输入题干" type="text"> -->
+			<textarea class="form-control" placeholder="请输入题干"></textarea>	
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-sm-3">
+			<label class="col-sm-5" for="form-field-12">正确答案:</label>
+ 		    <br>
+ 		    <label>
+				<input id="gritter-light" value="1" class="ace ace-switch ace-switch-5" type="checkbox">
+				<span class="lbl"></span>
+			</label>
+			
+		</div>
+		<div class="col-sm-3">
+			<label class="col-sm-3" for="form-field-12">解析:</label>
+			<textarea id="jx" class="form-control" placeholder="请输入解析"></textarea>
+		</div>
+		<div class="col-sm-3">
+			<label class="col-sm-4" for="form-field-12">知识点:</label>
+			<textarea id="zsd" class="form-control" placeholder="知识点"></textarea>
+		</div>
+	</div>
+</div>
+</div>
+<button class="btn btn-lg btn-success" value="click_p">
+	<i class="icon-ok"></i>添加判断题
+</button>
+<hr/>
+<button class="btn btn-lg btn-success" value="submit">
+	<i class="icon-ok"></i>提交
+</button>
+{%endblock%}
+{%block js_bottom%}
+<script type="text/javascript">
+		jQuery(function($) {
+			var $index=1;
+			var index_t=1;
+			var index_p=1;
+			$("button[value=click_x]").click(function(){
+				var $content=$("<div class='row xz' id='s"+$index+"'><form class='form-horizontal' role='form'  action='#'>	<div class='form-group'>		<div class='col-sm-9'>			<label class='col-sm-2' for='form-field-12'>题干"+($index+1)+"</label>			<!-- <input id='form-field-1' class='col-xs-10 col-sm-5' placeholder='请输入题干' type='text'> -->			<textarea class='form-control' placeholder='请输入题干'></textarea>			</div>	</div>	<div class='space-4'></div>	<div class='form-group'>		<div class='col-xs-12 col-sm-4'>			<div class='widget-box'>				<div class='widget-header'>					<h4>选项</h4>					<div class='widget-toolbar'>						<a href='#' data-action='collapse'>							<i class='icon-chevron-up'></i>						</a>					</div>					<div class='widget-body'>						<div class='widget-main'  id='xx'>							<div>								<label for='form-field-8'>A:</label> 	 								<textarea class='form-control' placeholder='选项A:'></textarea>								</div>							<div>								<label for='form-field-8'>B:</label> 	 								<textarea  class='form-control' placeholder='选项B:'></textarea>								</div>							<div>								<label for='form-field-8'>C:</label> 	 								<textarea  class='form-control' placeholder='选项C:'></textarea>								</div>							<div>								<label for='form-field-8'>D:</label> 	 								<textarea  class='form-control' placeholder='选项D:'></textarea>								</div>							<div>								<label for='form-field-8'>E:</label> 	 								<textarea  class='form-control' placeholder='选项E:'></textarea>								</div>						</div>					</div>				</div>			</div>		</div>		<div class='col-xs-12 col-sm-4'>			<div class='widget-box'>				<div class='widget-header'>					<h4>答案与解析</h4>					<div class='widget-toolbar'>						<a href='#' data-action='collapse'>							<i class='icon-chevron-up'></i>						</a>					</div>					<div class='widget-body'>						<div class='widget-main'>							<label for='form-field-8'>正确答案</label>							<textarea id='canswer' class='form-control' placeholder='请输入A、B、C、D、E多项选择请用逗号隔开 '></textarea>							<div class='space-8'></div>							<label for='form-field-8'>解析</label>							<textarea id='jx' class='form-control' placeholder='请输入解题思路......'></textarea>							<div class='space-8'></div>							<label for='form-field-select-1'>知识点</label>							<textarea id='zsd' class='form-control' placeholder='请输入知识点以逗号隔开'></textarea>									</div>					</div>				</div>			</div>		</div>			</div></form></div>");
+				$("#s"+($index-1)).after($content);
+				$index++;
+			});
+			$("button[value=click_t]").click(function(){
+				var $content=$("<div class='row fill' id='t"+index_t+"'><div class='form-horizontal' role='form'>	<div class='form-group'>		<div class='col-sm-9'>			<label class='col-sm-2' for='form-field-12'>题干"+(index_t+1)+"</label>			<!-- <input id='form-field-1' class='col-xs-10 col-sm-5' placeholder='请输入题干' type='text'> -->			<textarea class='form-control' placeholder='请输入题干'></textarea>			</div>	</div>	<div class='form-group'>		<div class='col-sm-3'>			<label class='col-sm-5' for='form-field-12'>正确答案:</label> 		 <!-- <input id='form-field-1' class='col-xs-10 col-sm-5' placeholder='请输入题干' type='text'>  -->			<textarea id='canswer' class='form-control' placeholder='请输入正确答案'></textarea>		</div>		<div class='col-sm-3'>			<label class='col-sm-3' for='form-field-12'>解析:</label>			<textarea id='jx' class='form-control' placeholder='请输入解析'></textarea>		</div>		<div class='col-sm-3'>			<label class='col-sm-4' for='form-field-12'>知识点:</label>			<textarea id='zsd' class='form-control' placeholder='知识点'></textarea>		</div>	</div></div></div>")
+				$("#t"+(index_t-1)).after($content);
+				index_t++;
+			});
+			$("button[value=click_p]").click(function(){
+				var $content=$("<div class='row pd' id='p"+index_p+"'><div class='form-horizontal' role='form'>	<div class='form-group'>		<div class='col-sm-9'>			<label class='col-sm-2' for='form-field-12'>题干"+(index_p+1)+"</label>			<!-- <input id='form-field-1' class='col-xs-10 col-sm-5' placeholder='请输入题干' type='text'> -->			<textarea class='form-control' placeholder='请输入题干'></textarea>			</div>	</div>	<div class='form-group'>		<div class='col-sm-3'>			<label class='col-sm-5' for='form-field-12'>正确答案:</label> 		    <br> 		    <label>				<input id='gritter-light' value='1' checked='' class='ace ace-switch ace-switch-5' type='checkbox'>				<span class='lbl'></span>			</label>					</div>		<div class='col-sm-3'>			<label class='col-sm-3' for='form-field-12'>解析:</label>			<textarea id='jx' class='form-control' placeholder='请输入解析'></textarea>		</div>		<div class='col-sm-3'>			<label class='col-sm-4' for='form-field-12'>知识点:</label>			<textarea id='zsd' class='form-control' placeholder='知识点'></textarea>		</div>	</div></div></div>")
+				$("#p"+(index_p-1)).after($content);
+				index_p++;
+			});
+			/*提交所有内容*/
+			$("button[value=submit]").click(function(){
+				var root=new Object();
+				root.status=200;
+				root.message="";
+				var datacontent=new Object();
+ 				datacontent.course=$("#form-field-select-1").val();
+				datacontent.chapter=$("#zhangjie").val();
+				/* 获取选择题所有信息 */
+				var xzarr=new Array();
+				$(".xz").each(function(i){
+					var xz=new Object();
+					var id= $(this).attr("id");
+					var tg= $(this).children().find("textarea").val();			
+					var xx=$(this).find("#xx").children();				
+					var xxarr=new Array();
+					xx.each(function(j){
+						xxarr[j]=$(this).find("textarea").val();
+					});
+					
+					var answer=$(this).children().find("#canswer").val();
+					var jx=$(this).children().find("#jx").val();
+					var zsd=$(this).children().find("#zsd").val();				
+					xz.id=id;
+					xz.tg=tg;
+					xz.xx=xxarr;
+					xz.answer=answer;
+					xz.jx=jx;
+					xz.zsd=zsd;
+					xzarr[i]=xz;
+				});/*大循环 */
+				/* 获取填空题所有信息 */
+				var tkarr=new Array();
+				$(".fill").each(function(i){
+					var tk=new Object();
+					var id= $(this).attr("id");
+					var tg= $(this).children().find("textarea").val();						
+					var answer=$(this).children().find("#canswer").val();
+					var jx=$(this).children().find("#jx").val();
+					var zsd=$(this).children().find("#zsd").val();				
+					tk.id=id;
+					tk.tg=tg;
+					tk.answer=answer;
+					tk.jx=jx;
+					tk.zsd=zsd;
+					tkarr[i]=tk;
+				});/*大循环 */
+				/* 获取判断题所有信息 */
+				var pdarr=new Array();
+				$(".pd").each(function(i){
+					var pd=new Object();
+					var id= $(this).attr("id");
+					var tg= $(this).children().find("textarea").val();						
+					var answer=$(this).children().find("#gritter-light").prop("checked")
+					var jx=$(this).children().find("#jx").val();
+					var zsd=$(this).children().find("#zsd").val();				
+					pd.id=id;
+					pd.tg=tg;
+					pd.answer=answer;
+					pd.jx=jx;
+					pd.zsd=zsd;
+					pdarr[i]=pd;
+				});/*大循环 */
+				
+				datacontent.choice=xzarr;
+				datacontent.fill=tkarr;
+				datacontent.judge=pdarr;
+				root.data=datacontent
+				var jsonstr =JSON.stringify(root);
+				alert(jsonstr);
+				/* $.ajaxSetup({  
+					  beforeSend: function(xhr, settings){  
+					      var csrftoken = $.cookie('csrftoken');   
+					      xhr.setRequestHeader("X-CSRFToken", csrftoken);   
+					  }  
+				}); */
+				$.ajax({
+					type:"POST",
+					url:"{%url 'cpis:submitquestion'%}",
+					contentType:"application/json;charset=utf-8",
+					data:jsonstr,
+					dataType:"json",
+					success:function(message){
+						if(message>0){
+							if(message==200){
+								alert("提交成功！");
+								window.location = "{%url 'cpis:teacherview'%}";
+							}
+						}
+					},
+					error:function(message){
+						alert("提交失败,请检查网络或者联系管理员");
+					}
+				});
+			});
+			
+			
+			
+		});/*end */
+			
+</script>
+{%endblock%}

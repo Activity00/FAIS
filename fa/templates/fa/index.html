@@ -1,0 +1,88 @@
+{%load staticfiles%}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>301远程医学中心固定资产管理系统</title>
+    <link href="{% static 'fa/css/login.css' %}" rel="stylesheet" type="text/css"/>
+	<!-- 适配手机 -->
+	<meta name="viewport" content="width=device-width, 
+                                     initial-scale=1.0, 
+                                     maximum-scale=1.0, 
+                                     user-scalable=no">
+	<!-- 新 Bootstrap 核心 CSS 文件 -->
+	<link href="{%static 'fa/bootstrap3.3.7/css/bootstrap.min.css'%}" rel="stylesheet">
+	<!-- 可选的Bootstrap主题文件（一般不使用） -->
+	<script src="{%static 'bootstrap3.3.7/css/bootstrap-theme.min.css'%}"></script>
+</head>
+
+<body>
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<div class="header">
+       			 <h1 class="headerLogo">
+           		 <a title="301远程医学中心固定资产管理系统" target="_blank" href="#"><img alt="logo" src="{%static 'fa/images/logo.png'%}"></a>
+        		</h1>
+        		<div class="headerNav">
+          			<a target="_blank" href="#">意见反馈</a>
+            		<a target="_blank" href="#">帮助</a>
+        		</div>
+   			 </div>
+		</div>
+	</div>
+	<div class="row clearfix" style="background:url({%static 'fa/themes/theme-pic1.jpg'%});height:450px;background-repeat:no-repeat">
+		<div class="col-md-4 column">
+		</div>
+		<div class="col-md-4 column">
+		</div>
+		<div class="col-md-4 column">
+			<div class="banner">
+           		 <div id="o-box-up"></div>
+           		 <div id="o-box-down" style="table-layout:fixed;">
+                <form class="registerform" action="{%url 'fa:login'%}" method="post">
+                    {% csrf_token %}
+                    <div class="fm-item">
+                        <label for="logonId" class="form-label">账号</label>
+                        <input type="text"  placeholder="输入账号" maxlength="100" id="username" name="nid" class="i-text" datatype="s6-18" errormsg="用户名至少6个字符,最多18个字符！">
+                        <div class="ui-form-explain"></div>
+                    </div>
+
+                    <div class="fm-item">
+                        <label for="logonId" class="form-label">密码：</label>
+                        <input type="password" placeholder="请输入密码" maxlength="100" id="password" name="password" class="i-text" datatype="*6-16" nullmsg="请设置密码！" errormsg="密码范围在6~16位之间！">
+                        <div class="ui-form-explain"></div>
+                    </div>
+                    {%if error%}
+					<div class="error-box">
+                        <label for="logonId" class="form-label" style="color:red">账号或密码有误！请重试</label>
+                    </div>
+                    {%endif%}
+                    <div class="fm-item">
+                        <label for="logonId" class="form-label"></label>
+                        <input type="submit" value="" tabindex="4" id="send-btn" class="btn-login">
+                        <div class="ui-form-explain"></div>
+                    </div>
+                </form>
+
+          	  </div>
+       		 </div> 
+   			</div>
+		</div>
+	</div>
+	<div class="banner-shadow"></div>
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<div class="footer">
+       			 <p>Copyright &copy; 2017.Company name All rights reserved.<a target="_blank" href="http://www.301telemed.com/">301远程医学中心网络组</a></p>
+   			 </div>
+		</div>
+	</div>
+</div>
+</body>
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="{%static 'fa/jquery2.1.1/jquery.min.js'%}"></script>
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="{%static 'fa/bootstrap3.3.7/js/bootstrap.min.js'%}"></script>
+</html>

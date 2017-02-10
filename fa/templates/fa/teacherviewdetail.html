@@ -1,0 +1,47 @@
+{%extends "cpis/base.html"%}
+{%load staticfiles%}
+{%block title%}详细信息{%endblock%}
+{%block mystatic%}
+<link href="{%static 'cpis/css/teacherview.css'%}" rel="stylesheet" />
+{%endblock%}
+{%block main-content%}
+<div class="row">
+	<div class="col-sm-12">
+	{%if ptatices_choice%}
+		<h3>一.选择题</h3>
+		{%for item in ptatices_choice%}
+		<p>{{forloop.counter}}.{{item.topic}}</p>
+		<p>
+			A.{{item.optiona}}&nbsp;&nbsp;B.{{item.optionb}}&nbsp;&nbsp;C.{{item.optionc}}&nbsp;&nbsp;D.{{item.optiond}}&nbsp;&nbsp;E.{{item.optione}}
+		</p>
+		<p>正确答案:{{item.correctanswer}}</p>
+		<hr/>
+		{%endfor%}
+	{%endif%}	
+	</div>
+	<div class="row">
+	<div class="col-sm-12">
+	{%if pratices_fill%}
+		<h3>二.填空题</h3>
+		{%for item in pratices_fill%}
+		<p>{{forloop.counter}}.{{item.topic}}</p>
+		<p>正确答案:{{item.correctanswer}}</p>
+		<hr/>
+		{%endfor%}
+	{%endif%}	
+	</div>
+	</div>
+	<div class="row">
+	<div class="col-sm-12">
+	{%if pratices_judgement%}
+		<h3>三.判断题</h3>
+		{%for item in pratices_judgement%}
+		<p>{{forloop.counter}}.{{item.topic}}</p>
+		<p>正确答案:{{item.correctanswer}}</p>
+		<hr/>
+		{%endfor%}
+	{%endif%}	
+	</div>
+	</div>
+</div>
+{%endblock%}
