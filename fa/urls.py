@@ -17,5 +17,6 @@ urlpatterns = [
     url(r'^mainpage/$',views.mainPage,name='mainpage'),
     url(r'^logout/$',views.logout,name='logout'),
     url(r'^equipmentm/$',views.equipmentm,name='equipmentm'),
+    url(r'^exportexcel/$',views.exportitems,name='exportexcel'),
     ]
 

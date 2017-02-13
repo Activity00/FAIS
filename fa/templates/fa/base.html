@@ -10,7 +10,7 @@
 		<!-- basic styles -->
 		<link href="{%static 'fa/assets/css/bootstrap.min.css'%}" rel="stylesheet" />
 		<link rel="stylesheet" href="{%static 'fa/assets/css/font-awesome.min.css'%}" />
-
+		<link rel="stylesheet" href="{%static 'fa/assets/css/jquery-ui-1.10.3.full.min.css'%}" />
 		<!--[if IE 7]>
 		  <link rel="stylesheet" href="{%static 'fa/assets/css/font-awesome-ie7.min.css'%}" />
 		<![endif]-->
@@ -218,75 +218,38 @@
 					</div><!-- #sidebar-shortcuts -->
 <!-- 左侧菜单开始 -->
 					<ul class="nav nav-list">
-						
+						{%block menu%}
 						<li class="active">
-							<a href="#">
+							<a href="{%url 'fa:mainpage'%}">
 								<i class="icon-dashboard"></i>
 								<span class="menu-text"> 系统首页 </span>
 							</a>
 						</li>
-
 						<li class="">
-							<a href="#" class="dropdown-toggle">
-								<i class="icon-list"></i>
-								<span class="menu-text"> 设备信息 </span>
-
-								<b class="arrow icon-angle-down"></b>
+							<a href="{%url 'fa:equipmentm'%}">
+								<i class="icon-laptop"></i>
+								<span class="menu-text">设备信息</span>
 							</a>
-
-							<ul class="submenu">
-								<li>
-									<a href="{%url 'fa:equipmentm'%}">
-										<i class="icon-double-angle-right"></i>
-										设备管理
-									</a>
-								</li>
-
-								<li>
-									<a href="jqgrid.html">
-										<i class="icon-double-angle-right"></i>
-										设备状态
-									</a>
-								</li>
-								<li>
-									<a href="jqgrid.html">
-										<i class="icon-double-angle-right"></i>
-										意见反馈
-									</a>
-								</li>
-								<li>
-									<a href="jqgrid.html">
-										<i class="icon-double-angle-right"></i>
-										疑难分析
-									</a>
-								</li>
-							</ul>
 						</li>
-						
-						<li>
-							<a href="#" class="dropdown-toggle">
-								<i class="icon-tag"></i>
+						<li class="">
+							<a href="">
+								<i class="icon-globe"></i>
+								<span class="menu-text">网络设备</span>
+							</a>
+						</li>
+						<li class="">
+							<a href="">
+								<i class="icon-bullhorn"></i>
+								<span class="menu-text">查看反馈</span>
+							</a>
+						</li>
+						<li class="">
+							<a href="">
+								<i class="icon-food"></i>
 								<span class="menu-text">个人设置</span>
-								<b class="arrow icon-angle-down"></b>
 							</a>
-
-							<ul class="submenu">
-								<li>
-									<a href="profile.html">
-										<i class="icon-double-angle-right"></i>
-										个人资料
-									</a>
-								</li>
-
-								<li>
-									<a href="inbox.html">
-										<i class="icon-double-angle-right"></i>
-										修改密码
-									</a>
-								</li>
-								
-							</ul>
 						</li>
+						{%endblock%}
 					</ul><!-- /.nav-list -->
 
 					<div class="sidebar-collapse" id="sidebar-collapse">
@@ -429,7 +392,7 @@
 		<script src="{%static 'fa/assets/js/flot/jquery.flot.min.js'%}"></script>
 		<script src="{%static 'fa/assets/js/flot/jquery.flot.pie.min.js'%}"></script>
 		<script src="{%static 'fa/assets/js/flot/jquery.flot.resize.min.js'%}"></script>
-
+		<script src="{%static 'fa/assets/js/jquery-ui-1.10.3.full.min.js'%}"></script>
 		<!-- ace scripts -->
 
 		<script src="{%static 'fa/assets/js/ace-elements.min.js'%}"></script>
