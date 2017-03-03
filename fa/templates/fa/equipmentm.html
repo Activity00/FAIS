@@ -79,7 +79,7 @@
 				<tr role="row">
 					<th aria-label="" style="width: 53px;" colspan="1" rowspan="1" role="columnheader" class="center sorting_disabled">
 						<label>
-							<input class="ace" type="checkbox">
+							<input id="checkmain" class="ace" type="checkbox">
 							<span class="lbl"></span>
 				   		</label>
 					</th>
@@ -194,6 +194,28 @@ jQuery(function($) {
 		var b=$("#positions option:selected").attr("value");
 		window.location = "{%url 'fa:exportexcel'%}"+"?type_id="+a+"&position_id="+b;
 	});
+	
+	$("input#checkmain").bind("click",function(){
+		alert($("input#checkmain").attr("checked"));
+	    if($("input#checkmain").attr("checked")==undefined){
+	    	$("[type='checkbox']").attr("checked",true);
+	    }else{
+	    	$("[type='checkbox']").attr("checked",undefined);
+	    }
+	 }); 
+	
+	/* $("input#checkmain").toggle(function(){
+		$("[type='checkbox']").attr("checked",ture);
+		alert("1");
+	},function(){
+		$("[type='checkbox']").attr("checked",);
+		alert("2");
+	}); */
+	/* $("input#checkmain").attr("checked",function(index,oldvalue){
+	alert(oldvalue);
+}); */
+ 
+//全选
 	/* 对话框开始 */		
 	//override dialog's title function to allow for HTML titles
 				$.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
