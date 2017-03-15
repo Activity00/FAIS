@@ -16,7 +16,7 @@ urlpatterns = [
     url(r'^login/$',views.login,name='login'),
     url(r'^mainpage/$',views.mainPage,name='mainpage'),
     url(r'^logout/$',views.logout,name='logout'),
-    url(r'^equipmentm/$',views.equipmentm,name='equipmentm'),
+    url(r'^ajax_deal/$',views.ajax_deal,name='ajax_deal'),
     url(r'^exportexcel/$',views.exportitems,name='exportexcel'),
-    ]
+]
 

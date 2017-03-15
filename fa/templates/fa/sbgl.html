@@ -1,37 +1,5 @@
-{%extends "fa/base.html"%}
-{%block menu%}
- <li class="">
-							<a href="{%url 'fa:mainpage'%}">
-								<i class="icon-dashboard"></i>
-								<span class="menu-text"> 系统首页 </span>
-							</a>
-						</li>
-						<li class="active">
-							<a href="{%url 'fa:equipmentm'%}">
-								<i class="icon-laptop"></i>
-								<span class="menu-text">设备信息</span>
-							</a>
-						</li>
-						<li class="">
-							<a href="">
-								<i class="icon-globe"></i>
-								<span class="menu-text">网络设备</span>
-							</a>
-						</li>
-						<li class="">
-							<a href="#">
-								<i class="icon-bullhorn"></i>
-								<span class="menu-text">查看反馈</span>
-							</a>
-						</li>
-						<li class="">
-							<a href="#">
-								<i class="icon-food"></i>
-								<span class="menu-text">个人设置</span>
-							</a>
-						</li>
-{%endblock%}
-{%block main-content%}
+{% load mytags %}
+
 <div class="col-xs-12">
 	<h3 class="header smaller lighter blue">设备信息列表</h3>
 	<div class="table-header">
@@ -145,18 +113,31 @@
 				共{{info|length}}条</div>
 			</div>
 			<div class="col-sm-6">
-			<!-- <div class="dataTables_paginate paging_bootstrap">
-					<ul class="pagination">
-						<li class="prev disabled">
-							<a href="#"><i class="icon-double-angle-left"></i></a>
-						</li>
-						<li class="active"><a href="#">1</a></li>
-						<li><a href="#">2</a></li>
-					<li><a href="#">3</a></li>
-				<li class="next"><a href="#">
-		<i class="icon-double-angle-right"></i></a></li></ul>
-		</div> -->
-			</div>
+			<div class="dataTables_paginate paging_bootstrap">
+				
+				<ul class="pagination">
+					<li><a href="?page=1">首页</a></li>
+					<li>
+					{%if res.has_previous%}
+					<a href="?page={{bbs_list.previous_page_number}}">上一页</a>
+						{%endif%}
+					</li>
+					{%pagination res 10  5 as page_list%}
+					{%autoescape off%}
+					{{page_list}}
+					{%endautoescape%}
+				
+					<li>
+					{%if res.has_next%}
+						<a href="page={{res.next_page_number}}">下一页</a>
+					{%endif%}
+					</li>
+					<li>
+						<a href="?page={{res.paginator.num_pages}}">尾页</a>
+					</li>
+				</ul>
+		 </div> 
+		</div>
 	 </div>
 	</div>
   </div>
@@ -173,9 +154,7 @@
 				</p>
 		</div>
 <!--对话框结束  -->
-{%endblock%}
 
-{%block js_bottom%}
 <script type="text/javascript">
 jQuery(function($) {
 	$("#clzz").change(function(){
@@ -260,4 +239,3 @@ jQuery(function($) {
 	
 });
 </script>
-{%endblock%}

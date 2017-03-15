@@ -3,6 +3,7 @@ import StringIO
 
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http.response import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 import xlwt
@@ -43,50 +44,24 @@ def mainPage(request):
     return render(request, 'fa/mainpage.html', context)
 
 @login_required(login_url=settings.LOGIN_URL)
-def equipmentm(request):
-    info=None
-    clzzs=None
-    positions=None
-    position=None
-    type=None
-    position_name='全部'
-    type_name='全部'
-    type_id=request.GET.get('type_id')
-    position_id=request.GET.get('position_id')
-    if position_id:
-        if int(position_id) != 0:
-            position=EquipmentPosition.objects.get(id=position_id)
-            position_name=position.name
-    else:
-        position_id=0
-    
-    if type_id:
-        if int(type_id)!=0:
-            type=EquipmentType.objects.get(id=type_id)
-            type_name=type.name
-    else:
-        type_id=0
-    try:
-        type_id=int(type_id)
-        position_id=int(position_id)
-        if position_id==0 and type_id==0:
-            info=EquipmentBasticInfo.objects.all()
-        elif position_id==0 and type_id!=0:
-            info=EquipmentBasticInfo.objects.filter(type=type)
-        elif type_id==0 and position_id!=0:
-            info=EquipmentBasticInfo.objects.filter(position=position)
-        else:
-            info=EquipmentBasticInfo.objects.filter(type=type,position=position)
-        clzzs=EquipmentType.objects.all()
-        positions=EquipmentPosition.objects.all()
-    except:
-        pass
-    context={'info':info,'clzzs':clzzs,
-             'positions':positions,'type_id':type_id,
-             'position_id':position_id,
-             'type_name':type_name,
-             'position_name':position_name}
-    return render(request, 'fa/equipmentm.html', context)
+def ajax_deal(request):
+    '''左侧菜单栏点击事件处理'''
+    req=request.GET.get('req')
+    context={}
+    if req=='sbgl':
+        context=_sbgl(request)
+    elif req=='wlzt':
+        context=_wlzt(request)
+    elif req=='bxgl':
+        context=_bxgl(request)
+    elif req=='ptsjtj':
+        context=_ptsjtj(request)
+    elif req=='grzl':
+        context=_grzl(request)
+    elif req=='xgmm':
+        context=_xgmm(request)
+        
+    return render(request,'fa/%s.html'%req,context)
 
 @login_required(login_url=settings.LOGIN_URL)
 def exportitems(request):
@@ -144,4 +119,85 @@ def exportitems(request):
     output.seek(0)
     response.write(output.getvalue())
     return response
+
+def _sbgl(request):
+    '''设备管理界面'''
+    info=None
+    clzzs=None
+    positions=None
+    position=None
+    type=None
+    position_name='全部'
+    type_name='全部'
+    type_id=request.GET.get('type_id')
+    position_id=request.GET.get('position_id')
+    if position_id:
+        if int(position_id) != 0:
+            position=EquipmentPosition.objects.get(id=position_id)
+            position_name=position.name
+    else:
+        position_id=0
     
+    if type_id:
+        if int(type_id)!=0:
+            type=EquipmentType.objects.get(id=type_id)
+            type_name=type.name
+    else:
+        type_id=0
+    try:
+        type_id=int(type_id)
+        position_id=int(position_id)
+        if position_id==0 and type_id==0:
+            info=EquipmentBasticInfo.objects.all()
+        elif position_id==0 and type_id!=0:
+            info=EquipmentBasticInfo.objects.filter(type=type)
+        elif type_id==0 and position_id!=0:
+            info=EquipmentBasticInfo.objects.filter(position=position)
+        else:
+            info=EquipmentBasticInfo.objects.filter(type=type,position=position)
+        clzzs=EquipmentType.objects.all()
+        positions=EquipmentPosition.objects.all()
+    except:
+        pass
+    
+    contacts=None
+    paginator=Paginator(info,12)
+    try:
+        contacts=paginator.page(1)
+    except PageNotAnInteger:
+        contacts=paginator.page(1)
+    except EmptyPage:
+        contacts=paginator.page(paginator.num_pages)
+    
+    context={'info':info,'clzzs':clzzs,
+             'positions':positions,'type_id':type_id,
+             'position_id':position_id,
+             'type_name':type_name,
+             'position_name':position_name,'res':contacts}
+    
+    return context
+
+def _wlzt(request):
+    '''网络状态'''
+    context={}
+    return context
+
+def _bxgl(request):
+    '''报修管理'''
+    context={}
+    return context
+
+def _ptsjtj(request):
+    '''报修管理'''
+    context={}
+    return context
+
+def _grzl(request):
+    '''个人资料'''
+    context={}
+    return context
+
+def _xgmm(request):
+    '''修改密码'''
+    context={}
+    return context
