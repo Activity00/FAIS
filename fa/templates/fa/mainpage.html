@@ -43,7 +43,22 @@
 		<script src="{%static 'fa/assets/js/html5shiv.js'%}"></script>
 		<script src="{%static 'fa/assets/js/respond.min.js'%}"></script>
 		<![endif]-->
-		{%block mystatic%}{%endblock%}	
+		{%block mystatic%}
+		<link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+<style>
+     .marker {
+            color: #ff6600;
+            padding: 4px 10px;
+            border: 1px solid #fff;
+            white-space: nowrap;
+            font-size: 12px;
+            font-family: "";
+            background-color: #0066ff;
+        }
+</style>
+<script src="http://webapi.amap.com/maps?v=1.3&key=您申请的key值"></script>
+<script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+		{%endblock%}	
 </head>
 <body>
 	<div class="navbar navbar-default" id="navbar">
@@ -306,13 +321,13 @@
 		<!-- #nav-search -->
 	</div>
 					<div class="page-content">
-							<div class="page-header">
+							<!-- <div class="page-header">
 								<h1>控制台 <small> <i class="icon-double-angle-right"></i> 查看</small></h1>
-							</div><!-- /.page-header -->
+							</div> --><!-- /.page-header -->
 					{%block main-content%}
 					
 					{%endblock%}
-						</div>
+				  </div>
 					<!-- /.page-content -->
 				</div><!-- /.main-content -->
 				<div class="ace-settings-container" id="ace-settings-container">
@@ -429,6 +444,9 @@
 				//和下面的效果一样
 			});
 			jQuery(function($) {
+				{#首次进来系统首页#}
+				$(".page-content").load("{%url 'fa:ajax_deal'%}?req=xtsy");
+				
 				 $(".nav-list li").click(function(){
 					 $(this).each(function(){
 						 var menustr=$(this).attr("value");

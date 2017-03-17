@@ -1,11 +1,13 @@
 #-*-coding:utf-8-*-
 import StringIO
+import json
 
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http.response import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 import xlwt
 
 from FAIS import settings
@@ -62,6 +64,15 @@ def ajax_deal(request):
         context=_xgmm(request)
         
     return render(request,'fa/%s.html'%req,context)
+
+@csrf_exempt
+@login_required(login_url=settings.LOGIN_URL)
+def deletebaseinfo(request):
+    '''删除基本信息操作'''
+    jsonstr=json.loads(request.body)
+    data=jsonstr['data']
+    EquipmentBasticInfo.objects.filter(id__in=data).delete()
+    return HttpResponse(json.dumps('200'),content_type="application/json")
 
 @login_required(login_url=settings.LOGIN_URL)
 def exportitems(request):
@@ -156,6 +167,11 @@ def _sbgl(request):
             info=EquipmentBasticInfo.objects.filter(position=position)
         else:
             info=EquipmentBasticInfo.objects.filter(type=type,position=position)
+        filterstr=request.GET.get('filter')
+        if filterstr is not None:
+            info=info.filter(remark__contains=filterstr)
+        else:
+            filterstr=''
         clzzs=EquipmentType.objects.all()
         positions=EquipmentPosition.objects.all()
     except:
@@ -174,7 +190,8 @@ def _sbgl(request):
              'positions':positions,'type_id':type_id,
              'position_id':position_id,
              'type_name':type_name,
-             'position_name':position_name,'res':contacts}
+             'position_name':position_name,'res':contacts,
+             'filterstr':filterstr}
     
     return context
 

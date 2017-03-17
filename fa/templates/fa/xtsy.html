@@ -1,0 +1,37 @@
+<h3 align="center" >站点医院地图</h3>
+<hr/>
+<div id="xtsy_container" style="height: 750px;"></div>
+ 
+<script>
+
+    var marker, map = new AMap.Map("xtsy_container", {
+        resizeEnable: true,
+        center: [108.397428, 35.90923],
+        zoom: 4
+    });
+
+    // 实例化点标记
+ function addMarker(x,y,label) {
+        marker = new AMap.Marker({
+            icon: "http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
+            position: [x,y]
+        });
+        marker.setMap(map);
+        // 设置鼠标划过点标记显示的文字提示
+        marker.setTitle(label);
+        // 设置label标签
+        marker.setLabel({//label默认蓝框白底左上角显示，样式className为：amap-marker-label
+            offset: new AMap.Pixel(20, 20),//修改label相对于maker的位置
+            content: label
+        });
+   
+    }
+    
+ addMarker(116.405467, 39.907761,"解放军总医院");
+ addMarker(116.255467, 39.907001,"南京总医院301");
+ addMarker(116.255467, 29.907001,"澳门总医院301");
+ addMarker(116.255467, 20.907001,"宁波总医院301");
+ addMarker(116.255467, 25.907001,"上海总医院301");
+ addMarker(106.255467, 25.907001,"西安总医院301");
+ addMarker(106.455467, 25.907001,"某某总医院301");
+ </script>

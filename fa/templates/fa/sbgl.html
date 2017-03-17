@@ -36,7 +36,7 @@
 				</div>
 				<div class="col-sm-4">
 					<div id="sample-table-2_filter" class="dataTables_filter">
-						<label>搜索: <input aria-controls="sample-table-2" type="text"></label>
+						<label>搜索: <input class="sbgl_search" aria-controls="sample-table-2" type="text" value="{{filterstr}}"/></label>
 					</div>
 		      </div>
 		 </div>
@@ -69,7 +69,7 @@
 				<tr class="odd">
 					<td class="center  sorting_1">
 						<label>
-							<input class="ace" type="checkbox">
+							<input class="ace ecb" type="checkbox" value="{{item.id}}">
 							<span class="lbl"></span>
 						</label>
 					</td>
@@ -95,8 +95,7 @@
 							 <a class="green" id="publish" name="" href="#">
 								  <i class="icon-pencil bigger-130"></i>
 							</a>
-							
-							<a class="red" href="#" id="id-btn-dialog2">
+							<a class="red delete_dialog" href="#" id="id-btn-dialog2" value="{{item.id}}">
 								<i class="icon-trash bigger-130"></i>
 							</a>
 						</div>
@@ -157,12 +156,14 @@
 
 <script type="text/javascript">
 jQuery(function($) {
+	{#设备类别改变#}
 	$("#clzz").change(function(){
 		var a=$("#clzz option:selected").attr("value");
 		var b=$("#positions option:selected").attr("value");
 	//	window.location ="?type_id="+a+"&position_id="+b;
 		$("#sbgl").parent().load("{%url 'fa:ajax_deal'%}?req=sbgl"+"&type_id="+a+"&position_id="+b+"&page="+{{res.number}});
 	});
+	{#设备位置改变#}
 	$("#positions").change(function(){
 		var a=$("#clzz option:selected").attr("value");
 		var b=$("#positions option:selected").attr("value");
@@ -184,27 +185,23 @@ jQuery(function($) {
 		window.location = "{%url 'fa:exportexcel'%}"+"?type_id="+a+"&position_id="+b;
 	});
 	
-	$("input#checkmain").bind("click",function(){
-		alert($("input#checkmain").attr("checked"));
-	    if($("input#checkmain").attr("checked")==undefined){
-	    	$("[type='checkbox']").attr("checked",true);
-	    }else{
-	    	$("[type='checkbox']").attr("checked",undefined);
-	    }
-	 }); 
-	
-	/* $("input#checkmain").toggle(function(){
-		$("[type='checkbox']").attr("checked",ture);
-		alert("1");
-	},function(){
-		$("[type='checkbox']").attr("checked",);
-		alert("2");
-	}); */
-	/* $("input#checkmain").attr("checked",function(index,oldvalue){
-	alert(oldvalue);
-}); */
- 
-//全选
+	{#全选按钮#}
+	$("input#checkmain").change(function(){
+		//判断是否被选中
+		if($(this).is(":checked")){
+			//解决第二次失效现象
+			$("input.ecb[type='checkbox']").prop("checked",true);
+		}else{
+			$("input.ecb[type='checkbox']").prop("checked",false);
+		}
+	});
+	{#搜索框改变事件#}
+	$(".sbgl_search").on("input propertychange",function(){  
+		var temp=$(this).val();
+		var a=$("#clzz option:selected").attr("value");
+		var b=$("#positions option:selected").attr("value");
+		$("#sbgl").parent().load("{%url 'fa:ajax_deal'%}?req=sbgl"+"&type_id="+a+"&position_id="+b+"&page="+$(this).attr("value")+"&filter="+temp);
+	});
 	/* 对话框开始 */		
 	//override dialog's title function to allow for HTML titles
 				$.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
@@ -215,35 +212,71 @@ jQuery(function($) {
 						else title.text($title);
 					}
 				}));
-			
-				$( "#id-btn-dialog2" ).on('click', function(e) {
-					e.preventDefault();
-				
-					$( "#dialog-confirm" ).removeClass('hide').dialog({
-						resizable: false,
-						modal: true,
-						title: "<div class='widget-header'><h4 class='smaller'><i class='icon-warning-sign red'></i>确认删除吗？</h4></div>",
-						title_html: true,
-						buttons: [
-							{
-								html: "<i class='icon-trash bigger-110'></i>&nbsp; 删除所选条目",
-								"class" : "btn btn-danger btn-xs",
-								click: function() {
-									$( this ).dialog( "close" );
+			    //删除对话框操作
+			    $(".delete_dialog").each(function(){
+			    	$(this).on('click', function(e) {
+						e.preventDefault();
+						var thisid=$(this).attr("value");
+						$( "#dialog-confirm" ).removeClass('hide').dialog({
+							resizable: false,
+							modal: true,
+							title: "<div class='widget-header'><h4 class='smaller'><i class='icon-warning-sign red'></i>确认删除吗？</h4></div>",
+							title_html: true,
+							buttons: [
+								{
+									html: "<i class='icon-trash bigger-110'></i>&nbsp; 删除所选条目",
+									"class" : "btn btn-danger btn-xs",
+									click: function() {
+										//删除所选条目
+										var delids=new Array();
+										$("input.ecb[type='checkbox']:checked").each(function(i){
+											var id= $(this).attr("value");
+											delids[i]=id;
+										});
+										if(delids.length==0)
+										{
+											delids[0]=thisid ;
+										}
+										var root=new Object();
+										root.data=delids
+										var jsonstr =JSON.stringify(root);
+										alert(jsonstr);
+										$.ajax({
+											type:"POST",
+											url:"{%url 'fa:deletebaseinfo'%}",
+											contentType:"application/json;charset=utf-8",
+											data:jsonstr,
+											dataType:"json",
+											success:function(message){
+												if(message>0){
+													if(message==200){
+														var a=$("#clzz option:selected").attr("value");
+														var b=$("#positions option:selected").attr("value");
+														$("#sbgl").parent().load("{%url 'fa:ajax_deal'%}?req=sbgl"+"&type_id="+a+"&position_id="+b+"&page="+{{res.number}});
+														
+													}
+												}
+											},
+											error:function(message){
+												alert("提交失败,请检查网络或者联系系统管理员tel:66936922");
+											}
+										});
+										$( this ).dialog( "close" );
+									}
 								}
-							}
-							,
-							{
-								html: "<i class='icon-remove bigger-110'></i>&nbsp; 取消",
-								"class" : "btn btn-xs",
-								click: function() {
-									$( this ).dialog( "close" );
+								,
+								{
+									html: "<i class='icon-remove bigger-110'></i>&nbsp; 取消",
+									"class" : "btn btn-xs",
+									click: function() {
+										//取消所选条目
+										$( this ).dialog( "close" );
+									}
 								}
-							}
-						]
+							]
+						});
 					});
-				});
-				
+			    });		
 	/*对话框结束  */
 	
 	
