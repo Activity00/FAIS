@@ -1,6 +1,5 @@
 {% load mytags %}
-
-<div class="col-xs-12">
+<div class="col-xs-12" id="sbgl">
 	<h3 class="header smaller lighter blue">设备信息列表</h3>
 	<div class="table-header">
 		显示结果
@@ -65,8 +64,8 @@
 			</thead>
 										
 			<tbody aria-relevant="all" aria-live="polite" role="alert">
-				{%if info%}
-				{%for item in info%}
+				{%if res%}
+				{%for item in res%}
 				<tr class="odd">
 					<td class="center  sorting_1">
 						<label>
@@ -110,30 +109,31 @@
 	  <div class="row">
 		<div class="col-sm-6">
 			<div id="sample-table-2_info" class="dataTables_info">
-				共{{info|length}}条</div>
+				当前第 {{ res.number }}页  / 共 {{ res.paginator.num_pages }}页.  <br/>
+				 共{{res.paginator.count}}条信息
+				</div>
 			</div>
 			<div class="col-sm-6">
 			<div class="dataTables_paginate paging_bootstrap">
 				
 				<ul class="pagination">
-					<li><a href="?page=1">首页</a></li>
+					<li><a href="#" value="1">首页</a></li>
 					<li>
 					{%if res.has_previous%}
-					<a href="?page={{bbs_list.previous_page_number}}">上一页</a>
+					<a href="#" value="{{res.previous_page_number}}">上一页</a>
 						{%endif%}
 					</li>
-					{%pagination res 10  5 as page_list%}
+					{%pagination res 12  5 as page_list%}
 					{%autoescape off%}
 					{{page_list}}
 					{%endautoescape%}
-				
 					<li>
 					{%if res.has_next%}
-						<a href="page={{res.next_page_number}}">下一页</a>
+						<a href="#" value="{{res.next_page_number}}">下一页</a>
 					{%endif%}
 					</li>
 					<li>
-						<a href="?page={{res.paginator.num_pages}}">尾页</a>
+						<a href="#" value="{{res.paginator.num_pages}}">尾页</a>
 					</li>
 				</ul>
 		 </div> 
@@ -144,15 +144,15 @@
 </div>
 <!--对话据昂  -->
 <div id="dialog-confirm" class="hide">
-			<div class="alert alert-info bigger-110">
-					删除将不能恢复！
-			</div>
-			<div class="space-6"></div>
-				<p class="bigger-110 bolder center grey">
-				 	<i class="icon-hand-right blue bigger-120"></i>
-					确定删除吗?
-				</p>
+		<div class="alert alert-info bigger-110">
+			删除将不能恢复！
 		</div>
+		<div class="space-6"></div>
+		<p class="bigger-110 bolder center grey">
+			<i class="icon-hand-right blue bigger-120"></i>
+				确定删除吗?
+		</p>
+</div>
 <!--对话框结束  -->
 
 <script type="text/javascript">
@@ -160,14 +160,24 @@ jQuery(function($) {
 	$("#clzz").change(function(){
 		var a=$("#clzz option:selected").attr("value");
 		var b=$("#positions option:selected").attr("value");
-		window.location ="?type_id="+a+"&position_id="+b;
+	//	window.location ="?type_id="+a+"&position_id="+b;
+		$("#sbgl").parent().load("{%url 'fa:ajax_deal'%}?req=sbgl"+"&type_id="+a+"&position_id="+b+"&page="+{{res.number}});
 	});
 	$("#positions").change(function(){
 		var a=$("#clzz option:selected").attr("value");
 		var b=$("#positions option:selected").attr("value");
-		window.location ="?type_id="+a+"&position_id="+b;
+	    //window.location ="?type_id="+a+"&position_id="+b;
+	    $("#sbgl").parent().load("{%url 'fa:ajax_deal'%}?req=sbgl"+"&type_id="+a+"&position_id="+b+"&page="+{{res.number}});
 	});
 	
+	{#点击分页事件#}
+	$(".pagination li a").click(function(){
+		var a=$("#clzz option:selected").attr("value");
+		var b=$("#positions option:selected").attr("value");
+		$("#sbgl").parent().load("{%url 'fa:ajax_deal'%}?req=sbgl"+"&type_id="+a+"&position_id="+b+"&page="+$(this).attr("value"));
+	});
+	
+	{#导出excel数据#}
 	$("#exportexcel").click(function(){
 		var a=$("#clzz option:selected").attr("value");
 		var b=$("#positions option:selected").attr("value");

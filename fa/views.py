@@ -86,6 +86,7 @@ def exportitems(request):
     else:
         info=EquipmentBasticInfo.objects.filter(type=EquipmentType.objects.get(id=type_id),
                                                 position=EquipmentPosition.objects.get(id=position_id))
+    #关键的两句输出excel文件
     response = HttpResponse(content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment;filename=export.xls'
     wb = xlwt.Workbook(encoding = 'utf-8')
@@ -163,13 +164,13 @@ def _sbgl(request):
     contacts=None
     paginator=Paginator(info,12)
     try:
-        contacts=paginator.page(1)
+        contacts=paginator.page(request.GET.get('page',1))
     except PageNotAnInteger:
         contacts=paginator.page(1)
     except EmptyPage:
         contacts=paginator.page(paginator.num_pages)
     
-    context={'info':info,'clzzs':clzzs,
+    context={'clzzs':clzzs,
              'positions':positions,'type_id':type_id,
              'position_id':position_id,
              'type_name':type_name,
