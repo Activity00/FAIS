@@ -1,0 +1,38 @@
+{#添加设备#}
+<div class="row tjsb">
+	<h2>添加设备信息</h2>
+	<hr/>
+	<div class="col-md-2"></div>
+	<div class="col-md-10">	
+		<form id="frm" action="#" method="post"> 
+		{%csrf_token%}
+			{{form.as_p}}
+		<hr/>
+		<button class="btn btn-success" type="submit">
+			提交
+			<!-- <i class="icon-signal"></i> -->
+		</button>
+		</form>
+	</div>
+</div>
+
+<script>
+	jQuery(function($){
+		$(".btn-success").click(function(){
+			var data=$("#frm").serialize();
+			//alert(data);
+			//$(".tjsb").parent().load("{%url 'fa:addbaseinfo'%}",data);
+			alert("bbb");
+			$.post("{%url 'fa:addbaseinfo'%}", data, 
+					function(data, textStatus){ 
+					alert("aaa");
+					$(".tjsb").parent().html(data); 
+			});
+			
+		});
+	});
+</script>
+
+
+
+

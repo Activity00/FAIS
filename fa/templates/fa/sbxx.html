@@ -1,5 +1,5 @@
 {% load mytags %}
-<div class="col-xs-12" id="sbgl">
+<div class="col-xs-12" id="sbxx">
 	<h3 class="header smaller lighter blue">设备信息列表</h3>
 	<div class="table-header">
 		显示结果
@@ -92,7 +92,7 @@
 					<!-- 操作的小图标 -->
 					<td class="">
 						<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
-							 <a class="green" id="publish" name="" href="#">
+							 <a class="green sbxx_xg" id="" name="" href="#">
 								  <i class="icon-pencil bigger-130"></i>
 							</a>
 							<a class="red delete_dialog" href="#" id="id-btn-dialog2" value="{{item.id}}">
@@ -153,7 +153,18 @@
 		</p>
 </div>
 <!--对话框结束  -->
-
+<!--对话框修改  -->
+<div id="dialog-sbgl-xg" class="hide">
+		<div class="alert alert-info bigger-110">
+			修改该条目
+		</div>
+		<div class="space-6"></div>
+		<p class="bigger-110 bolder center grey">
+			<i class="icon-hand-right blue bigger-120"></i>
+				这里是修改的表单
+		</p>
+</div>
+<!--对话框修改  -->
 <script type="text/javascript">
 jQuery(function($) {
 	{#设备类别改变#}
@@ -161,21 +172,21 @@ jQuery(function($) {
 		var a=$("#clzz option:selected").attr("value");
 		var b=$("#positions option:selected").attr("value");
 	//	window.location ="?type_id="+a+"&position_id="+b;
-		$("#sbgl").parent().load("{%url 'fa:ajax_deal'%}?req=sbgl"+"&type_id="+a+"&position_id="+b+"&page="+{{res.number}});
+		$("#sbxx").parent().load("{%url 'fa:ajax_deal'%}?req=sbxx"+"&type_id="+a+"&position_id="+b+"&page="+{{res.number}});
 	});
 	{#设备位置改变#}
 	$("#positions").change(function(){
 		var a=$("#clzz option:selected").attr("value");
 		var b=$("#positions option:selected").attr("value");
 	    //window.location ="?type_id="+a+"&position_id="+b;
-	    $("#sbgl").parent().load("{%url 'fa:ajax_deal'%}?req=sbgl"+"&type_id="+a+"&position_id="+b+"&page="+{{res.number}});
+	    $("#sbxx").parent().load("{%url 'fa:ajax_deal'%}?req=sbxx"+"&type_id="+a+"&position_id="+b+"&page="+{{res.number}});
 	});
 	
 	{#点击分页事件#}
 	$(".pagination li a").click(function(){
 		var a=$("#clzz option:selected").attr("value");
 		var b=$("#positions option:selected").attr("value");
-		$("#sbgl").parent().load("{%url 'fa:ajax_deal'%}?req=sbgl"+"&type_id="+a+"&position_id="+b+"&page="+$(this).attr("value"));
+		$("#sbxx").parent().load("{%url 'fa:ajax_deal'%}?req=sbxx"+"&type_id="+a+"&position_id="+b+"&page="+$(this).attr("value"));
 	});
 	
 	{#导出excel数据#}
@@ -196,11 +207,11 @@ jQuery(function($) {
 		}
 	});
 	{#搜索框改变事件#}
-	$(".sbgl_search").on("input propertychange",function(){  
+	$(".sbxx_search").on("input propertychange",function(){  
 		var temp=$(this).val();
 		var a=$("#clzz option:selected").attr("value");
 		var b=$("#positions option:selected").attr("value");
-		$("#sbgl").parent().load("{%url 'fa:ajax_deal'%}?req=sbgl"+"&type_id="+a+"&position_id="+b+"&page="+$(this).attr("value")+"&filter="+temp);
+		$("#sbxx").parent().load("{%url 'fa:ajax_deal'%}?req=sbxx"+"&type_id="+a+"&position_id="+b+"&page="+$(this).attr("value")+"&filter="+temp);
 	});
 	/* 对话框开始 */		
 	//override dialog's title function to allow for HTML titles
@@ -252,7 +263,7 @@ jQuery(function($) {
 													if(message==200){
 														var a=$("#clzz option:selected").attr("value");
 														var b=$("#positions option:selected").attr("value");
-														$("#sbgl").parent().load("{%url 'fa:ajax_deal'%}?req=sbgl"+"&type_id="+a+"&position_id="+b+"&page="+{{res.number}});
+														$("#sbxx").parent().load("{%url 'fa:ajax_deal'%}?req=sbxx"+"&type_id="+a+"&position_id="+b+"&page="+{{res.number}});
 														
 													}
 												}
@@ -277,8 +288,74 @@ jQuery(function($) {
 						});
 					});
 			    });		
-	/*对话框结束  */
-	
+	/*删除对话框结束  */
+			 /*修改对话框  */
+			  //删除对话框操作
+			    $(".sbxx_xg").each(function(){
+			    	$(this).on('click', function(e) {
+						e.preventDefault();
+						var thisid=$(this).attr("value");
+						$( "#dialog-sbgl-xg" ).removeClass('hide').dialog({
+							resizable: false,
+							modal: true,
+							title: "<div class='widget-header'><h4 class='smaller'><i class='icon-warning-sign red'></i>修改条目</h4></div>",
+							title_html: true,
+							buttons: [
+								{
+									html: "<i class='icon-trash bigger-110'></i>&nbsp; 确认修改",
+									"class" : "btn btn-danger btn-xs",
+									click: function() {
+										//删除所选条目
+										var delids=new Array();
+										$("input.ecb[type='checkbox']:checked").each(function(i){
+											var id= $(this).attr("value");
+											delids[i]=id;
+										});
+										if(delids.length==0)
+										{
+											delids[0]=thisid ;
+										}
+										var root=new Object();
+										root.data=delids
+										var jsonstr =JSON.stringify(root);
+										alert(jsonstr);
+										$.ajax({
+											type:"POST",
+											url:"{%url 'fa:deletebaseinfo'%}",
+											contentType:"application/json;charset=utf-8",
+											data:jsonstr,
+											dataType:"json",
+											success:function(message){
+												if(message>0){
+													if(message==200){
+														var a=$("#clzz option:selected").attr("value");
+														var b=$("#positions option:selected").attr("value");
+														$("#sbxx").parent().load("{%url 'fa:ajax_deal'%}?req=sbxx"+"&type_id="+a+"&position_id="+b+"&page="+{{res.number}});
+														
+													}
+												}
+											},
+											error:function(message){
+												alert("提交失败,请检查网络或者联系系统管理员tel:66936922");
+											}
+										});
+										$( this ).dialog( "close" );
+									}
+								}
+								,
+								{
+									html: "<i class='icon-remove bigger-110'></i>&nbsp; 取消",
+									"class" : "btn btn-xs",
+									click: function() {
+										//取消所选条目
+										$( this ).dialog( "close" );
+									}
+								}
+							]
+						});
+					});
+			    });
+			 /*修改对话框结束  */
 	
 });
 </script>

@@ -1,5 +1,6 @@
 #-*-coding:utf-8-*-
 import StringIO
+from __builtin__ import isinstance
 import json
 
 from django.contrib import auth
@@ -11,6 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 import xlwt
 
 from FAIS import settings
+from fa.forms import BaseinfoForm
 from fa.models import EquipmentBasticInfo, EquipmentType, EquipmentPosition
 
 
@@ -50,19 +52,12 @@ def ajax_deal(request):
     '''左侧菜单栏点击事件处理'''
     req=request.GET.get('req')
     context={}
-    if req=='sbgl':
-        context=_sbgl(request)
-    elif req=='wlzt':
-        context=_wlzt(request)
-    elif req=='bxgl':
-        context=_bxgl(request)
-    elif req=='ptsjtj':
-        context=_ptsjtj(request)
-    elif req=='grzl':
-        context=_grzl(request)
-    elif req=='xgmm':
-        context=_xgmm(request)
-        
+    try:
+        context=eval('_'+req)(request)
+        if not isinstance(context, dict):
+            return context
+    except:
+        pass
     return render(request,'fa/%s.html'%req,context)
 
 @csrf_exempt
@@ -73,6 +68,22 @@ def deletebaseinfo(request):
     data=jsonstr['data']
     EquipmentBasticInfo.objects.filter(id__in=data).delete()
     return HttpResponse(json.dumps('200'),content_type="application/json")
+
+def addbaseinfo(request):
+    '''添加设备信息'''
+    if request.method == 'POST':
+        form=BaseinfoForm(request.POST)
+        if form.is_valid():
+            info=form.save()
+            info.save()
+            return HttpResponse('好了')
+        else:
+            #如果表单无效返回的结果
+            print 'aaa'
+            return HttpResponse('a')
+    else:
+        print 'bbb'
+        return HttpResponseRedirect('/fa')
 
 @login_required(login_url=settings.LOGIN_URL)
 def exportitems(request):
@@ -132,7 +143,7 @@ def exportitems(request):
     response.write(output.getvalue())
     return response
 
-def _sbgl(request):
+def _sbxx(request):
     '''设备管理界面'''
     info=None
     clzzs=None
@@ -193,6 +204,11 @@ def _sbgl(request):
              'position_name':position_name,'res':contacts,
              'filterstr':filterstr}
     
+    return context
+
+def _tjsb(request):
+    form=BaseinfoForm()
+    context={'form':form}
     return context
 
 def _wlzt(request):

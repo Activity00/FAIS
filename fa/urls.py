@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^mainpage/deletebaseinfo/$',views.deletebaseinfo,name='deletebaseinfo'),
     url(r'^logout/$',views.logout,name='logout'),
     url(r'^ajax_deal/$',views.ajax_deal,name='ajax_deal'),
+    url(r'^addbaseinfo/$',views.addbaseinfo,name='addbaseinfo'),
     url(r'^exportexcel/$',views.exportitems,name='exportexcel'),
 ]
 
