@@ -1,6 +1,7 @@
 #-*-coding:utf-8-*-
 import StringIO
 from __builtin__ import isinstance
+import datetime
 import json
 
 from django.contrib import auth
@@ -10,7 +11,6 @@ from django.http.response import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 import xlwt
-
 from FAIS import settings
 from fa.forms import BaseinfoForm
 from fa.models import EquipmentBasticInfo, EquipmentType, EquipmentPosition
@@ -71,18 +71,23 @@ def deletebaseinfo(request):
 
 def addbaseinfo(request):
     '''添加设备信息'''
-    if request.method == 'POST':
-        form=BaseinfoForm(request.POST)
-        if form.is_valid():
-            info=form.save()
-            info.save()
-            return HttpResponse('好了')
-        else:
-            #如果表单无效返回的结果
-            print 'aaa'
-            return HttpResponse('a')
+    if request.method == 'POST': 
+        content=request.POST
+        info=EquipmentBasticInfo()
+        info.name=content.get('name')
+        print info.name
+        info.modelType=content.get('modelType')
+        info.type=EquipmentType.objects.get(id=content.get('type'))
+        info.price=content.get('price')
+        info.user=content.get('user')
+        info.position=EquipmentPosition.objects.get(id=content.get('position'))
+        print content.get('purchasetime')
+        info.purchasetime= datetime.datetime.strptime(content.get('purchasetime'),'%m/%d/%Y')
+        info.remark=content.get('remark')
+        info.save()
+        return HttpResponse('success')
     else:
-        print 'bbb'
+        print '出错啦！'
         return HttpResponseRedirect('/fa')
 
 @login_required(login_url=settings.LOGIN_URL)
@@ -207,6 +212,7 @@ def _sbxx(request):
     return context
 
 def _tjsb(request):
+    '''添加设备'''
     form=BaseinfoForm()
     context={'form':form}
     return context

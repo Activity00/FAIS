@@ -6,30 +6,90 @@
 	<div class="col-md-10">	
 		<form id="frm" action="#" method="post"> 
 		{%csrf_token%}
-			{{form.as_p}}
+				<p><label for="id_name">设备名称:</label> <input type="text" required="" name="name" id="id_name"></p>
+<p><label for="id_type">设备类型:</label> <select required="" name="type" id="id_type">
+<option selected="selected" value="">---------</option>
+<option value="3">交换机</option>
+<option value="4">光模块</option>
+<option value="5">其他办公设备</option>
+<option value="6">台式电脑</option>
+<option value="9">无线路由器</option>
+<option value="1">服务器</option>
+<option value="7">网络安全设备</option>
+<option value="8">视频终端</option>
+<option value="2">路由器</option>
+</select></p>
+<p><label for="id_modelType">设备型号:</label> <input type="text" required="" name="modelType" id="id_modelType"></p>
+<p><label for="id_price">设备单价:</label> <input type="number" required="" name="price" id="id_price"></p>
+<p><label for="id_user">使用人:</label> <input type="text" required="" name="user" id="id_user"></p>
+<p><label for="id_position">设备新型号:</label> <select required="" name="position" id="id_position">
+<option selected="selected" value="">---------</option>
+<option value="22">健宾楼6004</option>
+<option value="1">健宾楼6008</option>
+<option value="8">健宾楼机房</option>
+<option value="3">内科楼三层北竖井</option>
+<option value="4">内科楼三层南竖井</option>
+<option value="20">内科楼九会</option>
+<option value="19">内科楼二会</option>
+<option value="6">内科楼二层北竖井</option>
+<option value="2">内科楼二层机房</option>
+<option value="24">内科楼五会</option>
+<option value="25">内科楼六会</option>
+<option value="21">内科楼十二会</option>
+<option value="23">外科楼17层</option>
+<option value="5">教学大楼地下一层</option>
+<option value="26">肿瘤大楼十五层</option>
+<option value="9">门诊楼一会</option>
+<option value="15">门诊楼七会</option>
+<option value="11">门诊楼三会</option>
+<option value="17">门诊楼九会</option>
+<option value="10">门诊楼二会</option>
+<option value="13">门诊楼五会</option>
+<option value="16">门诊楼八会</option>
+<option value="14">门诊楼六会</option>
+<option value="18">门诊楼十会</option>
+<option value="12">门诊楼四会</option>
+</select></p>
+<p><label for="id_purchasetime">购买时间:</label>
+<div class="input-group">
+<input id="id-date-picker-1" name="purchasetime" class="form-control date-picker" type="text" data-date-format="yyyy-mm-dd">
+<span class="input-group-addon">
+<i class="icon-calendar bigger-110"></i>
+</span>
+</div></p>
+<p><label for="id_remark">备注:</label> <input type="text" required="" name="remark" id="id_remark"></p>
 		<hr/>
-		<button class="btn btn-success" type="submit">
-			提交
+		<input class="btn btn-success" type="submit" value="提交"/>
 			<!-- <i class="icon-signal"></i> -->
-		</button>
+
 		</form>
 	</div>
 </div>
 
 <script>
 	jQuery(function($){
-		$(".btn-success").click(function(){
-			var data=$("#frm").serialize();
-			//alert(data);
-			//$(".tjsb").parent().load("{%url 'fa:addbaseinfo'%}",data);
-			alert("bbb");
-			$.post("{%url 'fa:addbaseinfo'%}", data, 
-					function(data, textStatus){ 
-					alert("aaa");
-					$(".tjsb").parent().html(data); 
-			});
-			
+		$('.date-picker').datepicker({autoclose:true}).next().on(ace.click_event, function(){
+			$(this).prev().focus();
 		});
+		$("#frm").on("submit", function(ev) {  
+			var data=$("#frm").serialize();
+		  
+			$.ajax({  
+	             type:"POST",
+	             url:"{%url 'fa:addbaseinfo'%}",
+	             data:data,
+	             success:function(msg){
+	            	 $(".tjsb").parent().load("{%url 'fa:ajax_deal'%}?req="+"addinfosuccess");
+	             },
+	             error:function(msg){
+	            	 alert("提交失败！请检查网络或联系管理员");
+	             }
+	         });   
+	            //阻止submit表单提交  
+	            ev.preventDefault();  
+	            //或者return false  
+	            //return false;  
+	    });  
 	});
 </script>
 

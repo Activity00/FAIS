@@ -1,0 +1,18 @@
+<div class="addinfosuccess">
+	<h3 align="center">添加成功!</h3>
+	<button class="addinfosuccess_goonadd">继续添加
+		<i class=""></i>
+	</button>
+	<button class="addinfosuccess_viewinfo">查看设备信息</button>
+</div>
+<script>
+	jQuery(function($){
+		$(".addinfosuccess_goonadd").click(function(){
+			$(".addinfosuccess").parent().load("{%url 'fa:ajax_deal'%}?req="+"tjsb");
+		});
+		$(".addinfosuccess_goonadd").click(function(){
+			$(".addinfosuccess").parent().load("{%url 'fa:ajax_deal'%}?req="+"sbxx");
+		});
+		
+	});
+</script>

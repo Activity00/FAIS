@@ -1,0 +1,8 @@
+1.采用ajax部分刷新（右侧刷新）如果用django中forms表单、或者就是表单数据。post提交
+ 表单后跳转问题怎么解决(怎么得到返回值来用js控制显示)。涉及到post和get。用$post后台会报错
+ 估计和自带的form功能、和data格式有关。
+解决:暂时没有好的解决方法。只能是先手动提取。request.POST.get('aaa')
+（1）方法:用js的seriable得到表单数据、提交到views中，直接用form表单校验会报错，暂时不知道
+为啥，但是可以分别提取，然后存。成功可以通过request在请求一次。如果不成功（不让他不成功）
+(2)后来用这个方法：http://blog.csdn.net/chwow/article/details/53886629
+
